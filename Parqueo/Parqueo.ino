@@ -28,12 +28,20 @@ uint8_t Indicador1 = 0;
 uint8_t Indicador2 = 0;
 uint8_t Indicador3 = 0;
 uint8_t Indicador4 = 0;
+uint8_t Indicador5 = 0;
+uint8_t Indicador6 = 0;
+uint8_t Indicador7 = 0;
+uint8_t Indicador8 = 0;
+String inputString = "";
+const char separador = ',';
+int verificador[4];
+bool stringComplete = false;
 
 void setup() {
   // put your setup code here, to run once:
   // start serial port at 9600 bps:
   Serial2.begin(115200);
- 
+  Serial3.begin(115200);
   //Salidas de los indicadores
   pinMode(2, OUTPUT);
   pinMode(3, OUTPUT);
@@ -62,21 +70,43 @@ void setup() {
   digitalWrite(7, LOW);
   digitalWrite(8, HIGH);
   digitalWrite(9, LOW);
+
+  inputString.reserve(200);
 }
 
 void loop() {
   // put your main code here, to run repeatedly: 
- delay(500);
+  //1001
+  if(Serial3.available()){
+    char inChar = (char)Serial3.read();
+    inputString = inChar;
+    if(inputString == "-"){
+      inputString = "";
+      for(int n = 0; n < 4; n++){
+        char inChar = (char)Serial3.read();
+        inputString += inChar;     
+      }
+   }
+    Serial2.println(inputString);
+  }
 
-  Serial2.write(Indicador1);
-  Serial2.write(Indicador2);
-  Serial2.write(Indicador3);
-  Serial2.write(Indicador4);
-  
+   for(size_t i = 0; i < inputString.length(); i++){
+        verificador[i] = inputString.charAt(i);
+   }
+    
+  /*Serial2.println(verificador[0]);
+  Serial2.println(verificador[1]);
+  Serial2.println(verificador[2]);
+  Serial2.println(verificador[3]);*/
+    
   Serial2.println(Indicador1);
   Serial2.println(Indicador2);
   Serial2.println(Indicador3);
   Serial2.println(Indicador4);
+  Serial2.println(Indicador5);
+  Serial2.println(Indicador6);
+  Serial2.println(Indicador7);
+  Serial2.println(Indicador8);
 }
 
 void Indicador_1(){
